@@ -49,6 +49,11 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         
     }
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 project(":html") {
@@ -64,6 +69,11 @@ project(":html") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion:sources"
         
     }
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 }
 
 project(":core") {
@@ -74,6 +84,11 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         
+    }
+
+    compileJava {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
 }
 
