@@ -2,6 +2,7 @@ package com.hilkojj.game.ecs.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.hilkojj.game.Game;
 import com.hilkojj.game.ecs.components.Drawables;
@@ -11,14 +12,21 @@ import static com.hilkojj.game.ecs.components.Drawables.DrawLayer.NUMBER_OF_LAYE
 
 public class RenderSystem extends EntitySystem {
 
+	private OrthographicCamera camera;
 	private SpriteBatch batch = new SpriteBatch();
 	private ImmutableArray<Entity> entities;
 	private ComponentMapper<Drawables> mapper = ComponentMapper.getFor(Drawables.class);
+
+	public RenderSystem(OrthographicCamera camera) {
+		this.camera = camera;
+	}
 
 	@Override
 	public void update(float deltaTime) {
 
 		long startTime = System.currentTimeMillis();
+
+		batch.setProjectionMatrix(camera.combined);
 
 		// start rendering:
 		batch.begin();

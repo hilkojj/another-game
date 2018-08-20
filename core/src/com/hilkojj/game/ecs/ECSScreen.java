@@ -2,17 +2,22 @@ package com.hilkojj.game.ecs;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.hilkojj.game.ecs.entities.Bat;
 import com.hilkojj.game.ecs.systems.RenderSystem;
 
 public class ECSScreen implements Screen {
 
 	private Engine engine;
+	private OrthographicCamera camera = new OrthographicCamera(320 / 16f, 180 / 16f);
 
 	@Override
 	public void show() {
 		engine = new Engine();
 
-		engine.addSystem(new RenderSystem());
+		engine.addSystem(new RenderSystem(camera));
+
+		engine.addEntity(new Bat());
 	}
 
 	@Override
@@ -44,7 +49,8 @@ public class ECSScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-
+		camera.setToOrtho(false, 13.5F * width / height, 13.5F);
+		camera.update();
 	}
 
 }
