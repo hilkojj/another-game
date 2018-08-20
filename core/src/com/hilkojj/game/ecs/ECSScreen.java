@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.hilkojj.game.ecs.entities.Bat;
+import com.hilkojj.game.ecs.systems.CameraTrackingSystem;
 import com.hilkojj.game.ecs.systems.RenderSystem;
 
 public class ECSScreen implements Screen {
@@ -15,6 +16,7 @@ public class ECSScreen implements Screen {
 	public void show() {
 		engine = new Engine();
 
+		engine.addSystem(new CameraTrackingSystem(camera));
 		engine.addSystem(new RenderSystem(camera));
 
 		engine.addEntity(new Bat());

@@ -2,6 +2,8 @@ package com.hilkojj.game.ecs.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.hilkojj.game.Game;
@@ -18,6 +20,7 @@ public class RenderSystem extends EntitySystem {
 	private ComponentMapper<Drawables> mapper = ComponentMapper.getFor(Drawables.class);
 
 	public RenderSystem(OrthographicCamera camera) {
+		super(-999999999);
 		this.camera = camera;
 	}
 
@@ -30,6 +33,9 @@ public class RenderSystem extends EntitySystem {
 
 		// start rendering:
 		batch.begin();
+
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		for (int i = 0; i < NUMBER_OF_LAYERS; i++) {
 
