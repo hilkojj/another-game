@@ -1,12 +1,25 @@
-package com.hilkojj.game.components;
+package com.hilkojj.game.ecs.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
-import com.hilkojj.game.graphics.DrawLayer;
 import com.hilkojj.game.graphics.Drawable;
 
 
 public class Drawables implements Component {
+
+	public enum DrawLayer {
+
+		MAIN(0);
+
+		public final static int NUMBER_OF_LAYERS = DrawLayer.values().length;
+
+		public final int index;
+
+		DrawLayer(int index) {
+			this.index = index;
+		}
+
+	}
 
 	public final Collection[] collections = new Collection[DrawLayer.NUMBER_OF_LAYERS];
 

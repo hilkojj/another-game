@@ -1,42 +1,29 @@
 package com.hilkojj.game;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.hilkojj.game.entities.Edward;
-import com.hilkojj.game.systems.RenderSystem;
 
-public class Game extends ApplicationAdapter {
+public class Game extends com.badlogic.gdx.Game {
 
-	public static Engine engine;
-	public static AssetManager assetManager;
+	public AssetManager assetManager;
 
 	public static long renderTime;
 
 	@Override
 	public void create () {
 
-		engine = new Engine();
-		engine.addSystem(new RenderSystem());
+		assetManager = new AssetManager();
 
-		engine.addEntity(new Edward());
+		setScreen(new LoadingScreen(this));
 
 	}
 
 	@Override
 	public void render () {
 
-
-		engine.update(Gdx.graphics.getDeltaTime());
+		super.render();
 
 		Gdx.graphics.setTitle("fps: " + Gdx.graphics.getFramesPerSecond() + " RenderTime: " + renderTime + "ms");
-
-
-	}
-	
-	@Override
-	public void dispose () {
 
 	}
 

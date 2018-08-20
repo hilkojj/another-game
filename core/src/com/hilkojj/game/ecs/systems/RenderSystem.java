@@ -1,12 +1,13 @@
-package com.hilkojj.game.systems;
+package com.hilkojj.game.ecs.systems;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.hilkojj.game.Game;
-import com.hilkojj.game.components.Drawables;
-import com.hilkojj.game.graphics.DrawLayer;
+import com.hilkojj.game.ecs.components.Drawables;
 import com.hilkojj.game.graphics.Drawable;
+
+import static com.hilkojj.game.ecs.components.Drawables.DrawLayer.NUMBER_OF_LAYERS;
 
 public class RenderSystem extends EntitySystem {
 
@@ -22,7 +23,7 @@ public class RenderSystem extends EntitySystem {
 		// start rendering:
 		batch.begin();
 
-		for (int i = 0; i < DrawLayer.NUMBER_OF_LAYERS; i++) {
+		for (int i = 0; i < NUMBER_OF_LAYERS; i++) {
 
 			for (Entity e : entities) {
 
@@ -31,14 +32,14 @@ public class RenderSystem extends EntitySystem {
 
 				if (c == null) continue;
 
-				for (Drawable d : c) d.draw(batch);
+				for (Drawable d : c) d.draw(batch, deltaTime);
 			}
 		}
 
 		// end rendering:
 		batch.end();
 
-		Game.renderTime = System.currentTimeMillis() - startTime;
+		Game.renderTime = System.currentTimeMillis() - startTime + 5;
 	}
 
 	@Override

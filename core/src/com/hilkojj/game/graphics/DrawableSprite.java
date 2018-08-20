@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class DrawableSprite extends Sprite implements Drawable {
 
 	@Override
-	public void draw(SpriteBatch batch) {
+	public void draw(SpriteBatch batch, float deltaTime) {
 //		super.draw(batch);
 	}
 
