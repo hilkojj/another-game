@@ -3,6 +3,7 @@ package com.hilkojj.game.systems;
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.hilkojj.game.Game;
 import com.hilkojj.game.components.Drawables;
 import com.hilkojj.game.graphics.DrawLayer;
 import com.hilkojj.game.graphics.Drawable;
@@ -37,8 +38,7 @@ public class RenderSystem extends EntitySystem {
 		// end rendering:
 		batch.end();
 
-		long renderTime = System.currentTimeMillis() - startTime;
-//		System.out.println("Render-time: " + renderTime);
+		Game.renderTime = System.currentTimeMillis() - startTime;
 	}
 
 	@Override
