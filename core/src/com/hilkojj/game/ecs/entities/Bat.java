@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.hilkojj.game.ecs.components.CameraTracking;
 import com.hilkojj.game.ecs.components.Drawables;
+import com.hilkojj.game.ecs.components.Physics;
 import com.hilkojj.game.graphics.DrawableSprite;
 
 public class Bat extends Entity {
@@ -14,10 +15,17 @@ public class Bat extends Entity {
 				new Drawables().addDrawable(new DrawableSprite("sprites/bat.png"), Drawables.DrawLayer.MAIN)
 		);
 
+		Vector2 position = new Vector2();
+
 		add(
-				new CameraTracking(new Vector2())
+				new CameraTracking(position)
 		);
 
+		Physics p = new Physics(1);
+
+		p.bodies.add(new Physics.Body(position, new Vector2(.2f, .2f), false));
+
+		add(p);
 	}
 
 }
