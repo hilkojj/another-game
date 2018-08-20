@@ -2,11 +2,11 @@ package com.hilkojj.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.hilkojj.game.loading.LoadingScreen;
 
 public class Game extends com.badlogic.gdx.Game {
 
-	public AssetManager assetManager;
-
+	public static AssetManager assetManager;
 	public static long renderTime;
 
 	@Override

@@ -1,6 +1,7 @@
-package com.hilkojj.game;
+package com.hilkojj.game.loading;
 
 import com.badlogic.gdx.Screen;
+import com.hilkojj.game.Game;
 import com.hilkojj.game.ecs.ECSScreen;
 
 public class LoadingScreen implements Screen {
@@ -17,12 +18,19 @@ public class LoadingScreen implements Screen {
 
 	@Override
 	public void show() {
-
+		AssetLoader.loadAssets(Game.assetManager);
 	}
 
 	@Override
 	public void render(float delta) {
-		doneLoading();
+
+		if (Game.assetManager.update()) {
+			doneLoading();
+			return;
+		}
+
+		System.out.println("Loading progress: " + Game.assetManager.getProgress() * 100 + "%");
+
 	}
 
 	@Override
