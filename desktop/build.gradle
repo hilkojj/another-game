@@ -6,17 +6,23 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "com.hilkojj.game.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
 
-static def indexDirectories() {
-    [ "../core/assets", "../core/assets/sprites" ].each { dir ->
+def indexDirectories() {
+
+    def basePath = new File(".").absolutePath.endsWith("another-game\\.") ? "./core/assets/" : "../core/assets/"
+
+    ["", "sprites"].each { dir ->
         def indexData = ""
-        def directory = new File(dir)
+        def dirPath = basePath + dir
+        def directory = new File(dirPath)
         directory.eachFile { file ->
             indexData += file.name + "\n"
         }
-        def indexFile = new File(dir + "/index.txt")
+        def indexFile = new File(dirPath + "/index.txt")
         indexFile.write("")
         indexFile.write(indexData)
     }
+
+    println "index.txt files generated for asset directories"
 }
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -32,8 +38,6 @@ task run(dependsOn: classes, type: JavaExec) {
 
 task debug(dependsOn: classes, type: JavaExec) {
 
-    indexDirectories()
-
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
@@ -43,8 +47,6 @@ task debug(dependsOn: classes, type: JavaExec) {
 }
 
 task dist(type: Jar) {
-
-    indexDirectories()
 
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
