@@ -26,7 +26,7 @@ public class ECSScreen implements Screen {
 
 		engine.addEntity(new Bat());
 
-		room = new Room(3, 3);
+		room = new Room("rooms/testroom.tmx");
 	}
 
 	@Override

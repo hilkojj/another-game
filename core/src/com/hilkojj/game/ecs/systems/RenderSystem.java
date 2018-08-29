@@ -27,6 +27,8 @@ public class RenderSystem extends EntitySystem {
 		super(-999999999);
 		this.esc = esc;
 		shapeRenderer.setAutoShapeType(true);
+
+		esc.camera.zoom = 20;
 	}
 
 	@Override
@@ -85,30 +87,14 @@ public class RenderSystem extends EntitySystem {
 
 			for (int y = 0; y < room.yChunks * Room.CHUNK_HEIGHT; y++) {
 
-				Room.BlockType b = room.blocks[x][y];
+				if (room.blocks[x][y] == Room.Block.AIR) continue;
 
-				if (b == null) continue;
-
-				switch (b) {
-
-					case SOLID:
-
-						renderer.line(x, y, x + 1, y);
-						renderer.line(x, y + 1, x + 1, y + 1);
-						renderer.line(x, y, x, y + 1);
-						renderer.line(x + 1, y, x + 1, y + 1);
-						break;
-
-					case PLATFORM:
-						renderer.line(x, y + 1, x + 1, y + 1);
-						break;
-
-				}
-
+				renderer.line(x, y, x + 1, y);
+				renderer.line(x, y + 1, x + 1, y + 1);
+				renderer.line(x, y, x, y + 1);
+				renderer.line(x + 1, y, x + 1, y + 1);
 			}
 		}
-
-
 	}
 
 }
