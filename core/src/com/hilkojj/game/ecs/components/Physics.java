@@ -34,6 +34,7 @@ public class Physics implements Component {
 				velocity = new Vector2();
 
 		public PositionCorrection positionCorrection = PositionCorrection.CORRECT_POSITION;
+		public float step = .6f;
 
 		public boolean
 				touchedRightWall,
@@ -45,8 +46,8 @@ public class Physics implements Component {
 				wasOnGround,
 				onGround,
 
-				wasAtCeiling,
-				atCeiling,
+				touchedCeiling,
+				touchesCeiling,
 
 				collidesWithPlatforms;
 

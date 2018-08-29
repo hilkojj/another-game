@@ -87,7 +87,7 @@ public class RenderSystem extends EntitySystem {
 
 			for (int y = 0; y < room.yChunks * Room.CHUNK_HEIGHT; y++) {
 
-				if (room.blocks[x][y] == Room.Block.AIR) continue;
+				if (room.getBlock(x, y) == Room.Block.AIR) continue;
 
 				renderer.line(x, y, x + 1, y);
 				renderer.line(x, y + 1, x + 1, y + 1);

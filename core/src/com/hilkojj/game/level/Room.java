@@ -22,8 +22,9 @@ public class Room {
 
 	private final static Block[] BLOCK_VALUES = Block.values();
 
+	private final Block[][] blocks;
+
 	public final int xChunks, yChunks;
-	public final Block[][] blocks;
 
 	public Room(int xChunks, int yChunks) {
 		this.xChunks = xChunks;
@@ -62,6 +63,11 @@ public class Room {
 				);
 			}
 		}
+	}
+
+	public Block getBlock(int x, int y) {
+		if (x < 0 || x >= xChunks * CHUNK_WIDTH || y < 0 || y >= yChunks * CHUNK_HEIGHT) return Block.AIR;
+		return blocks[x][y];
 	}
 
 	private Block blockIdToBlock(int id) {
