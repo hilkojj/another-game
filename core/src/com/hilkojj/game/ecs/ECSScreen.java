@@ -7,11 +7,14 @@ import com.hilkojj.game.ecs.entities.Bat;
 import com.hilkojj.game.ecs.systems.CameraTrackingSystem;
 import com.hilkojj.game.ecs.systems.PhysicsSystem;
 import com.hilkojj.game.ecs.systems.RenderSystem;
+import com.hilkojj.game.level.Room;
 
 public class ECSScreen implements Screen {
 
 	private Engine engine;
-	private OrthographicCamera camera = new OrthographicCamera(320 / 16f, 180 / 16f);
+	private Room room;
+
+	public final OrthographicCamera camera = new OrthographicCamera(320 / 16f, 180 / 16f);
 
 	@Override
 	public void show() {
@@ -19,9 +22,11 @@ public class ECSScreen implements Screen {
 
 		engine.addSystem(new PhysicsSystem());
 		engine.addSystem(new CameraTrackingSystem(camera));
-		engine.addSystem(new RenderSystem(camera));
+		engine.addSystem(new RenderSystem(this));
 
 		engine.addEntity(new Bat());
+
+		room = new Room(3, 3);
 	}
 
 	@Override
@@ -55,6 +60,10 @@ public class ECSScreen implements Screen {
 	public void resize(int width, int height) {
 		camera.setToOrtho(false, 13.5F * width / height, 13.5F);
 		camera.update();
+	}
+
+	public Room getRoom() {
+		return room;
 	}
 
 }
