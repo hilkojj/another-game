@@ -15,12 +15,12 @@ import static com.hilkojj.game.ecs.components.Physics.Body.PositionCorrection.TO
 
 public class PhysicsSystem extends IteratingSystem {
 
-	private ECSScreen esc;
+	private ECSScreen ecs;
 
-	public PhysicsSystem(ECSScreen esc) {
+	public PhysicsSystem(ECSScreen ecs) {
 		super(Family.all(Physics.class).get());
 
-		this.esc = esc;
+		this.ecs = ecs;
 	}
 
 	private ComponentMapper<Physics> mapper = ComponentMapper.getFor(Physics.class);
@@ -148,8 +148,8 @@ public class PhysicsSystem extends IteratingSystem {
 			for (int tileX = (int) (pos.x - body.halfSize.x);
 				 tileX <= (int) (pos.x + body.halfSize.x); tileX++) {
 
-				Room.Block block = esc.getRoom().getBlock(tileX, tileY);
-				Room.Block air = esc.getRoom().getBlock(tileX, tileY + 1);
+				Room.Block block = ecs.getRoom().getBlock(tileX, tileY);
+				Room.Block air = ecs.getRoom().getBlock(tileX, tileY + 1);
 
 				if (block != Room.Block.AIR && air == Room.Block.AIR) {
 					pos.y = tileY + 1 + body.halfSize.y;
@@ -177,8 +177,8 @@ public class PhysicsSystem extends IteratingSystem {
 			for (int tileX = (int) (pos.x - body.halfSize.x);
 				 tileX <= (int) (pos.x + body.halfSize.x); tileX++) {
 
-				Room.Block block = esc.getRoom().getBlock(tileX, tileY);
-				Room.Block air = esc.getRoom().getBlock(tileX, tileY - 1);
+				Room.Block block = ecs.getRoom().getBlock(tileX, tileY);
+				Room.Block air = ecs.getRoom().getBlock(tileX, tileY - 1);
 
 				if (block != Room.Block.AIR && air == Room.Block.AIR) {
 					pos.y = tileY - body.halfSize.y - .00001F;
@@ -198,8 +198,8 @@ public class PhysicsSystem extends IteratingSystem {
 		for (int tileY = (int) (pos.y - body.halfSize.y);
 			 tileY <= (int) (pos.y + body.halfSize.y); tileY++) {
 
-			Room.Block block = esc.getRoom().getBlock(tileX, tileY);
-			Room.Block air = esc.getRoom().getBlock(tileX + 1, tileY);
+			Room.Block block = ecs.getRoom().getBlock(tileX, tileY);
+			Room.Block air = ecs.getRoom().getBlock(tileX + 1, tileY);
 
 			if (block != Room.Block.AIR && air == Room.Block.AIR) {
 				pos.x = tileX + 1 + body.halfSize.x + .00001F;
@@ -219,8 +219,8 @@ public class PhysicsSystem extends IteratingSystem {
 		for (int tileY = (int) (pos.y - body.halfSize.y);
 			 tileY <= (int) (pos.y + body.halfSize.y); tileY++) {
 
-			Room.Block block = esc.getRoom().getBlock(tileX, tileY);
-			Room.Block air = esc.getRoom().getBlock(tileX - 1, tileY);
+			Room.Block block = ecs.getRoom().getBlock(tileX, tileY);
+			Room.Block air = ecs.getRoom().getBlock(tileX - 1, tileY);
 
 			if (block != Room.Block.AIR && air == Room.Block.AIR) {
 				pos.x = tileX - body.halfSize.x - .00001F;

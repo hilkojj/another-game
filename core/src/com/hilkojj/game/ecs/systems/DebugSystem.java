@@ -11,24 +11,24 @@ import com.hilkojj.game.utils.AABB;
 
 public class DebugSystem extends EntitySystem {
 
-	private ECSScreen esc;
+	private ECSScreen ecs;
 	private ShapeRenderer shapeRenderer = new ShapeRenderer();
 	private ImmutableArray<Entity> entities;
 	private ComponentMapper<DebugShapes> mapper = ComponentMapper.getFor(DebugShapes.class);
 
-	public DebugSystem(ECSScreen esc) {
+	public DebugSystem(ECSScreen ecs) {
 		super(999999999);
-		this.esc = esc;
+		this.ecs = ecs;
 		shapeRenderer.setAutoShapeType(true);
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		shapeRenderer.setProjectionMatrix(esc.camera.combined);
+		shapeRenderer.setProjectionMatrix(ecs.camera.combined);
 
 		shapeRenderer.begin();
 		shapeRenderer.setColor(Color.RED);
-		if (esc.getRoom() != null) drawRoom(esc.getRoom(), shapeRenderer);
+		if (ecs.getRoom() != null) drawRoom(ecs.getRoom(), shapeRenderer);
 
 		shapeRenderer.setColor(Color.BLUE);
 		for (Entity e : entities) {

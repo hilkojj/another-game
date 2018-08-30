@@ -14,14 +14,14 @@ import static com.hilkojj.game.ecs.components.Drawables.DrawLayer.NUMBER_OF_LAYE
 
 public class RenderSystem extends EntitySystem {
 
-	private ECSScreen esc;
+	private ECSScreen ecs;
 	private SpriteBatch batch = new SpriteBatch();
 	private ImmutableArray<Entity> entities;
 	private ComponentMapper<Drawables> mapper = ComponentMapper.getFor(Drawables.class);
 
-	public RenderSystem(ECSScreen esc) {
+	public RenderSystem(ECSScreen ecs) {
 		super(888888888);
-		this.esc = esc;
+		this.ecs = ecs;
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class RenderSystem extends EntitySystem {
 
 		long startTime = System.currentTimeMillis();
 
-		batch.setProjectionMatrix(esc.camera.combined);
+		batch.setProjectionMatrix(ecs.camera.combined);
 
 		// start rendering:
 		batch.begin();
