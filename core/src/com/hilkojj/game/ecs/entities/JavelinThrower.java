@@ -4,19 +4,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.hilkojj.game.ecs.components.CameraTracking;
 import com.hilkojj.game.ecs.components.DebugShapes;
-import com.hilkojj.game.ecs.components.Drawables;
 import com.hilkojj.game.ecs.components.Physics;
-import com.hilkojj.game.graphics.DrawableSprite;
+import com.hilkojj.game.ecs.components.movement.Movement;
+import com.hilkojj.game.ecs.components.movement.PlatformerMovement;
+import com.hilkojj.game.ecs.components.movement.PlayerInput;
 
-public class Bat extends Entity {
+public class JavelinThrower extends Entity {
 
-	public Bat() {
+	public JavelinThrower() {
 
-		add(
-				new Drawables().addDrawable(new DrawableSprite("sprites/bat.png"), Drawables.DrawLayer.MAIN)
-		);
-
-		Vector2 position = new Vector2();
+		Vector2 position = new Vector2(10, 10);
 
 		add(
 				new CameraTracking(position)
@@ -31,6 +28,20 @@ public class Bat extends Entity {
 		add(p);
 
 		add(new DebugShapes().addAabb(b));
+
+		add(
+				new Movement()
+		);
+
+		add(
+				new PlatformerMovement(
+						b, 3.2f, 12, 2 * -9.8f, 10
+				)
+		);
+
+		add(
+				new PlayerInput()
+		);
 	}
 
 }

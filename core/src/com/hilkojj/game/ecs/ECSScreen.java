@@ -3,11 +3,8 @@ package com.hilkojj.game.ecs;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.hilkojj.game.ecs.entities.Bat;
-import com.hilkojj.game.ecs.systems.CameraTrackingSystem;
-import com.hilkojj.game.ecs.systems.DebugSystem;
-import com.hilkojj.game.ecs.systems.PhysicsSystem;
-import com.hilkojj.game.ecs.systems.RenderSystem;
+import com.hilkojj.game.ecs.entities.JavelinThrower;
+import com.hilkojj.game.ecs.systems.*;
 import com.hilkojj.game.level.Room;
 
 public class ECSScreen implements Screen {
@@ -25,8 +22,10 @@ public class ECSScreen implements Screen {
 		engine.addSystem(new CameraTrackingSystem(camera));
 		engine.addSystem(new RenderSystem(this));
 		engine.addSystem(new DebugSystem(this));
+		engine.addSystem(new PlayerMovement());
+		engine.addSystem(new PlatformerMovementSystem());
 
-		engine.addEntity(new Bat());
+		engine.addEntity(new JavelinThrower());
 
 		room = new Room("rooms/testroom.tmx");
 	}

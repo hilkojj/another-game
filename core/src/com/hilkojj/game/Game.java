@@ -21,6 +21,8 @@ public class Game extends com.badlogic.gdx.Game {
 	@Override
 	public void render () {
 
+		Input.update();
+
 		super.render();
 
 		Gdx.graphics.setTitle("fps: " + Gdx.graphics.getFramesPerSecond() + " RenderTime: " + renderTime + "ms");
