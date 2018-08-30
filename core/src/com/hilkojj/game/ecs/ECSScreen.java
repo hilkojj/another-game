@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.hilkojj.game.ecs.entities.Bat;
 import com.hilkojj.game.ecs.systems.CameraTrackingSystem;
+import com.hilkojj.game.ecs.systems.DebugSystem;
 import com.hilkojj.game.ecs.systems.PhysicsSystem;
 import com.hilkojj.game.ecs.systems.RenderSystem;
 import com.hilkojj.game.level.Room;
@@ -23,6 +24,7 @@ public class ECSScreen implements Screen {
 		engine.addSystem(new PhysicsSystem(this));
 		engine.addSystem(new CameraTrackingSystem(camera));
 		engine.addSystem(new RenderSystem(this));
+		engine.addSystem(new DebugSystem(this));
 
 		engine.addEntity(new Bat());
 
