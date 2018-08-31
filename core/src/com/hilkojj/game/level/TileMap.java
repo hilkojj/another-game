@@ -3,6 +3,7 @@ package com.hilkojj.game.level;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.hilkojj.game.Game;
+import com.hilkojj.game.utils.Random;
 
 import static com.hilkojj.game.level.Room.CHUNK_HEIGHT;
 import static com.hilkojj.game.level.Room.CHUNK_WIDTH;
@@ -185,12 +186,23 @@ public class TileMap {
 				),
 
 				new Tile(
+						3, 3,
+						new BlockType[]{
+								ANY, BLK, ANY,
+								BLK, BLK, BLK,
+								ANY, BLK, ANY
+						},
+						.04f
+				),
+
+				new Tile(
 						3, 2,
 						new BlockType[]{
 								ANY, BLK, ANY,
 								BLK, BLK, BLK,
 								ANY, BLK, ANY
-						}
+						},
+						.02f
 				),
 
 				new Tile(
@@ -199,16 +211,8 @@ public class TileMap {
 								ANY, BLK, ANY,
 								BLK, BLK, BLK,
 								ANY, BLK, ANY
-						}
-				),
-
-				new Tile(
-						3, 3,
-						new BlockType[]{
-								ANY, BLK, ANY,
-								BLK, BLK, BLK,
-								ANY, BLK, ANY
-						}
+						},
+						.02f
 				),
 
 				new Tile(
@@ -288,8 +292,14 @@ public class TileMap {
 		public final int textureX, textureY;
 		public final BlockType[] blockTypes;
 		public final int specificity;
+		public final float prob;
 
 		Tile(int textureX, int textureY, BlockType[] blockTypes) {
+			this(textureX, textureY, blockTypes, .5f);
+		}
+
+		Tile(int textureX, int textureY, BlockType[] blockTypes, float prob) {
+			this.prob = prob;
 			this.textureX = textureX;
 			this.textureY = textureY;
 
@@ -323,9 +333,6 @@ public class TileMap {
 
 			for (int y = 0; y < map[x].length; y++) map[x][y] = findTileFor(x, y, room);
 		}
-
-		Tile t = map[3][7] = findTileFor(3, 7, room);
-		System.out.println(t.textureX + ", " + t.textureY);
 	}
 
 	private Tile findTileFor(int x, int y, Room room) {
@@ -361,7 +368,9 @@ public class TileMap {
 			if (bestTile == null) bestTile = tile;
 			else {
 
-				if (bestTile.specificity < tile.specificity) bestTile = tile;
+				if (bestTile.specificity < tile.specificity
+						|| (bestTile.specificity == tile.specificity && Random.random() < tile.prob))
+					bestTile = tile;
 
 			}
 
