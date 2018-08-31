@@ -30,7 +30,7 @@ public class CameraTrackingSystem extends IteratingSystem {
 
 		CameraTracking c = mapper.get(entity);
 
-		position.set(c.position);
+		position.lerp(c.position, (float) (1 - Math.pow(c.smooth, deltaTime)));
 
 		Room r = ecs.getRoom();
 		if (r != null) {

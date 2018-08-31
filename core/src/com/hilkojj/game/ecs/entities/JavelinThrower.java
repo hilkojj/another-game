@@ -16,7 +16,7 @@ public class JavelinThrower extends Entity {
 		Vector2 position = new Vector2(10, 10);
 
 		add(
-				new CameraTracking(position)
+				new CameraTracking(position, .1f)
 		);
 
 		Physics p = new Physics(1);
