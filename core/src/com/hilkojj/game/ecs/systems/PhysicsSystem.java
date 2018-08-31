@@ -195,7 +195,7 @@ public class PhysicsSystem extends IteratingSystem {
 
 		int tileX = (int) (pos.x - body.halfSize.x - .00001F);
 
-		for (int tileY = (int) (pos.y - body.halfSize.y);
+		for (int tileY = (int) (pos.y - body.halfSize.y + .001f);
 			 tileY <= (int) (pos.y + body.halfSize.y); tileY++) {
 
 			Room.Block block = ecs.getRoom().getBlock(tileX, tileY);
@@ -216,7 +216,7 @@ public class PhysicsSystem extends IteratingSystem {
 
 		int tileX = (int) (pos.x + body.halfSize.x + .00001F);
 
-		for (int tileY = (int) (pos.y - body.halfSize.y);
+		for (int tileY = (int) (pos.y - body.halfSize.y + .001f);
 			 tileY <= (int) (pos.y + body.halfSize.y); tileY++) {
 
 			Room.Block block = ecs.getRoom().getBlock(tileX, tileY);

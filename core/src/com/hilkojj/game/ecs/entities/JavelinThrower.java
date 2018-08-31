@@ -21,7 +21,7 @@ public class JavelinThrower extends Entity {
 
 		Physics p = new Physics(1);
 
-		Physics.Body b = new Physics.Body(position, new Vector2(.2f, .2f), false);
+		Physics.Body b = new Physics.Body(position, new Vector2(.3f, .9f), false);
 
 		p.bodies.add(b);
 
