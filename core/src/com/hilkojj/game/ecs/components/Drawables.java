@@ -9,7 +9,8 @@ public class Drawables implements Component {
 
 	public enum DrawLayer {
 
-		MAIN(0);
+		TILE_MAP(0),
+		MAIN(1);
 
 		public final static int NUMBER_OF_LAYERS = DrawLayer.values().length;
 

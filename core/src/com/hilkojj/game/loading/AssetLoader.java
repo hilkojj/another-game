@@ -9,7 +9,7 @@ class AssetLoader {
 	enum Assets {
 
 		TEXTURES(
-				new String[]{"sprites"},
+				new String[]{"sprites", "sprites/tilesets"},
 				new String[]{"png", "jpg"},
 				Texture.class
 		);

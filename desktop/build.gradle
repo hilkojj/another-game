@@ -10,7 +10,7 @@ def indexDirectories() {
 
     def basePath = new File(".").absolutePath.endsWith("another-game\\.") ? "./core/assets/" : "../core/assets/"
 
-    ["", "sprites"].each { dir ->
+    ["", "sprites", "sprites/tilesets"].each { dir ->
         def indexData = ""
         def dirPath = basePath + dir
         def directory = new File(dirPath)

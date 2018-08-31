@@ -3,19 +3,22 @@ package com.hilkojj.game.level;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.XmlReader;
 
+import java.util.Arrays;
+
 public class Room {
 
 	public final static int CHUNK_WIDTH = 24, CHUNK_HEIGHT = 16;
 
 	public enum Block {
-		AIR(0),
-		GRASS(1),
-		ICE(2);
+		AIR(0, null),
+		GRASS(1, "grass_but_mostly_bricks.png");
 
 		public final int id;
+		public final String tileset;
 
-		Block(int id) {
+		Block(int id, String tileset) {
 			this.id = id;
+			this.tileset = tileset;
 		}
 
 	}
@@ -24,20 +27,10 @@ public class Room {
 
 	private final Block[][] blocks;
 
+	private TileMap tileMap;
+
 	public final int xChunks, yChunks;
-
-	public Room(int xChunks, int yChunks) {
-		this.xChunks = xChunks;
-		this.yChunks = yChunks;
-
-		blocks = new Block[xChunks * CHUNK_WIDTH][];
-		for (int x = 0; x < xChunks * CHUNK_WIDTH; x++) {
-
-			blocks[x] = new Block[yChunks * CHUNK_HEIGHT];
-
-			for (int y = 0; y < yChunks * CHUNK_HEIGHT; y++) blocks[x][y] = Block.AIR;
-		}
-	}
+	public final Block[] blocksUsed;
 
 	public Room(String filePath) {
 
@@ -50,6 +43,8 @@ public class Room {
 
 		String blockIds = xml.getChildByName("layer").getChildByName("data").getText().replaceAll("\\D+", "");
 
+		Block[] blocksUsed = new Block[BLOCK_VALUES.length];
+		int blocksUsedI = 0;
 
 		for (int x = 0; x < xChunks * CHUNK_WIDTH; x++) {
 
@@ -58,16 +53,36 @@ public class Room {
 			for (int y = 0; y < yChunks * CHUNK_HEIGHT; y++) {
 
 				int i = (yChunks* CHUNK_HEIGHT - y - 1) * xChunks * CHUNK_WIDTH + x;
-				blocks[x][y] = blockIdToBlock(
+
+				Block b = blockIdToBlock(
 						Character.getNumericValue(blockIds.charAt(i))
 				);
+
+				blocks[x][y] = b;
+
+				boolean unique = true;
+
+				for (Block usedBlock : blocksUsed) if (usedBlock == b) {
+					unique = false;
+					break;
+				}
+
+				if (unique) blocksUsed[blocksUsedI++] = b;
 			}
 		}
+
+		this.blocksUsed = Arrays.copyOfRange(blocksUsed, 0, blocksUsedI);
 	}
 
 	public Block getBlock(int x, int y) {
 		if (x < 0 || x >= xChunks * CHUNK_WIDTH || y < 0 || y >= yChunks * CHUNK_HEIGHT) return Block.AIR;
 		return blocks[x][y];
+	}
+
+	public TileMap getTileMap() {
+		if (tileMap == null) tileMap = new TileMap(this);
+
+		return tileMap;
 	}
 
 	private Block blockIdToBlock(int id) {

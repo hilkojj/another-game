@@ -9,8 +9,10 @@ import com.hilkojj.game.Game;
 import com.hilkojj.game.ecs.ECSScreen;
 import com.hilkojj.game.ecs.components.Drawables;
 import com.hilkojj.game.graphics.Drawable;
+import com.hilkojj.game.level.Room;
 
 import static com.hilkojj.game.ecs.components.Drawables.DrawLayer.NUMBER_OF_LAYERS;
+import static com.hilkojj.game.ecs.components.Drawables.DrawLayer.TILE_MAP;
 
 public class RenderSystem extends EntitySystem {
 
@@ -38,6 +40,12 @@ public class RenderSystem extends EntitySystem {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		for (int i = 0; i < NUMBER_OF_LAYERS; i++) {
+
+			if (i == TILE_MAP.index) {
+
+				Room r = ecs.getRoom();
+				if (r != null) r.getTileMap().render(batch);
+			}
 
 			for (Entity e : entities) {
 

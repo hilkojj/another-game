@@ -26,6 +26,7 @@ public class LoadingScreen implements Screen {
 
 		if (Game.assetManager.update()) {
 			doneLoading();
+			System.out.println(Game.assetManager.getLoadedAssets() + " assets loaded");
 			return;
 		}
 
