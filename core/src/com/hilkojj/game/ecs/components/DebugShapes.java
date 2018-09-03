@@ -16,4 +16,11 @@ public class DebugShapes implements Component {
 		return this;
 	}
 
+	public DebugShapes removeAabb(AABB aabb) {
+		if (aabbs == null) return this;
+
+		aabbs.removeValue(aabb, true);
+		return this;
+	}
+
 }

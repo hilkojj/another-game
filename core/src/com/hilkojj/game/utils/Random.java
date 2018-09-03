@@ -8,4 +8,9 @@ public class Random {
 		return R.nextFloat();
 	}
 
+	public static float random(float min, float max) {
+
+		return min + (max - min) * random();
+	}
+
 }

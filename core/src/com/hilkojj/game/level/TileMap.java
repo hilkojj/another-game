@@ -385,7 +385,7 @@ public class TileMap {
 
 			if (b.tileset == null) continue;
 
-			Texture tileset = Game.assetManager.get("sprites/tilesets/" + b.tileset, Texture.class);
+			Texture tileset = Game.assetManager.get(b.tileset, Texture.class);
 
 
 			for (int x = 0; x < room.xChunks * CHUNK_WIDTH; x++) {

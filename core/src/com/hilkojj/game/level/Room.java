@@ -11,7 +11,7 @@ public class Room {
 
 	public enum Block {
 		AIR(0, null),
-		GRASS(1, "grass_but_mostly_bricks.png");
+		GRASS(1, "sprites/tilesets/grass_but_mostly_bricks.png");
 
 		public final int id;
 		public final String tileset;
