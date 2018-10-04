@@ -20,12 +20,13 @@ public class ECSScreen implements Screen {
 
 		engine.addSystem(new PhysicsSystem(this));
 		engine.addSystem(new CameraTrackingSystem(this));
-		engine.addSystem(new RenderSystem(this));
+//		engine.addSystem(new RenderSystem(this));
 		engine.addSystem(new DebugSystem(this));
 		engine.addSystem(new PlayerMovement());
 		engine.addSystem(new PlatformerMovementSystem());
 		engine.addSystem(new ParticleSystem());
 		engine.addSystem(new LandingParticlesSystem(this));
+		engine.addSystem(new LightsSystem(this));
 
 		engine.addEntity(new JavelinThrower());
 

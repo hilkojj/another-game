@@ -28,6 +28,7 @@ public class Room {
 	private final Block[][] blocks;
 
 	private TileMap tileMap;
+	private RoomOutlines outlines;
 
 	public final int xChunks, yChunks;
 	public final Block[] blocksUsed;
@@ -81,8 +82,12 @@ public class Room {
 
 	public TileMap getTileMap() {
 		if (tileMap == null) tileMap = new TileMap(this);
-
 		return tileMap;
+	}
+
+	public RoomOutlines getOutlines() {
+		if (outlines == null) this.outlines = new RoomOutlines(this);
+		return outlines;
 	}
 
 	private Block blockIdToBlock(int id) {

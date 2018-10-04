@@ -1,6 +1,7 @@
 package com.hilkojj.game.ecs.entities;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.hilkojj.game.ecs.components.*;
 import com.hilkojj.game.ecs.components.movement.LandingParticles;
@@ -55,6 +56,15 @@ public class JavelinThrower extends Entity {
 		add(
 				new LandingParticles(b)
 		);
+
+
+		Lights l = new Lights();
+		l.add(new Lights.Light(
+				b.center,
+				5,
+				Color.WHITE
+		));
+		add(l);
 	}
 
 }

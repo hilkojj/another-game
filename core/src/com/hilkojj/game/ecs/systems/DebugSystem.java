@@ -8,6 +8,8 @@ import com.hilkojj.game.ecs.ECSScreen;
 import com.hilkojj.game.ecs.components.DebugShapes;
 import com.hilkojj.game.level.Room;
 import com.hilkojj.game.utils.AABB;
+import com.hilkojj.game.utils.AALine;
+import com.hilkojj.game.utils.Line;
 
 public class DebugSystem extends EntitySystem {
 
@@ -77,6 +79,12 @@ public class DebugSystem extends EntitySystem {
 		);
 	}
 
+	private void drawLine(Line l, ShapeRenderer renderer) {
+		renderer.line(l.p0, l.p1);
+	}
+
+	private Line temp = new Line();
+
 	private void drawRoom(Room room, ShapeRenderer renderer) {
 
 		renderer.setColor(Color.RED);
@@ -92,6 +100,11 @@ public class DebugSystem extends EntitySystem {
 				renderer.line(x, y, x, y + 1);
 				renderer.line(x + 1, y, x + 1, y + 1);
 			}
+		}
+		renderer.setColor(Color.PINK);
+		for (AALine outline : room.getOutlines()) {
+			temp.set(outline);
+			drawLine(temp, renderer);
 		}
 	}
 

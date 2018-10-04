@@ -16,4 +16,9 @@ public class AABB {
 				&& !(Math.abs(center.y - other.center.y) > halfSize.y + other.halfSize.y);
 	}
 
+	public boolean pointInAABB(int x, int y) {
+		return x <= center.x + halfSize.x && x >= center.x - halfSize.x
+			&& y <= center.y + halfSize.y && y >= center.y - halfSize.y;
+	}
+
 }
