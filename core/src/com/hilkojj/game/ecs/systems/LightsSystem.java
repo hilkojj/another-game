@@ -7,10 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -28,17 +25,17 @@ import com.hilkojj.game.utils.Line;
 public class LightsSystem extends IteratingSystem {
 
 	private static final int
-			HALF_MAX_LIGHT_RES = 128,
-			MAX_LIGHT_RES = 2 * HALF_MAX_LIGHT_RES,
-			LIGHTS_PER_ROW = 1;
+			HALF_LIGHT_RES = 128,
+			LIGHT_RES = 2 * HALF_LIGHT_RES,
+			LIGHTS_PER_ROW = 4,
+			FBO_RES = LIGHT_RES * LIGHTS_PER_ROW;
 
 	private ECSScreen ecs;
 	private ComponentMapper<Lights> mapper = ComponentMapper.getFor(Lights.class);
 
 	private FrameBuffer fbo = new FrameBuffer(
 			Pixmap.Format.RGBA8888,
-			MAX_LIGHT_RES * LIGHTS_PER_ROW,
-			MAX_LIGHT_RES * LIGHTS_PER_ROW,
+			FBO_RES, FBO_RES,
 			false
 	);
 	private Sprite shadowQuad;
@@ -58,14 +55,11 @@ public class LightsSystem extends IteratingSystem {
 		shadowQuad.setOrigin(0, 1);
 
 		// print shader errors/warnings
-		System.out.println(	"Border-shader log: \n" + bordersShader.getLog());
+		System.out.println("Border-shader log: \n" + bordersShader.getLog());
 
 		// set projection matrix of batch
 		batch.setProjectionMatrix(
-				new OrthographicCamera(
-						MAX_LIGHT_RES * LIGHTS_PER_ROW,
-						MAX_LIGHT_RES * LIGHTS_PER_ROW
-				).combined
+				new OrthographicCamera(FBO_RES, FBO_RES).combined
 		);
 	}
 
@@ -76,7 +70,7 @@ public class LightsSystem extends IteratingSystem {
 
 		// start
 		fbo.begin();
-		Gdx.gl.glClearColor(0, .1f, .2f, 1);
+		Gdx.gl.glClearColor(.5f, .5f, .5f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
@@ -102,7 +96,9 @@ public class LightsSystem extends IteratingSystem {
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 
-		for (Lights.Light l : mapper.get(entity)) renderLight(l, deltaTime);
+		for (Lights.Light l : mapper.get(entity))
+			for (int i = 0; i < 16; i++)
+				renderLight(l, deltaTime);
 
 	}
 
@@ -114,7 +110,16 @@ public class LightsSystem extends IteratingSystem {
 		lightX = lightIndex % LIGHTS_PER_ROW;
 		lightY = lightIndex / LIGHTS_PER_ROW;
 
-		shadowQuad.setColor(0, 1, 0, 1);
+		shadowQuad.setColor(		// color attribute is (mis-)used by shader to determine borders
+				// min X
+				(float) (lightX * LIGHT_RES) / FBO_RES,
+				// max X
+				(float)(lightX + 1) * LIGHT_RES / FBO_RES,
+				// min Y
+				(float) (LIGHT_RES * LIGHTS_PER_ROW - ((lightY + 1) * LIGHT_RES)) / FBO_RES,
+				// max Y
+				(float) (LIGHT_RES * LIGHTS_PER_ROW - (lightY * LIGHT_RES)) / FBO_RES
+		);
 
 		RoomOutlines outlines = ecs.getRoom().getOutlines();
 
@@ -174,14 +179,14 @@ public class LightsSystem extends IteratingSystem {
 			Vector2 point = i < 2 ? mappedLine0.point(i) : mappedLine1.point(i - 2);
 
 			point.sub(l.pos);
-			point.scl(16);
+			point.scl(Game.PPM);
 			point.add(
-					-(LIGHTS_PER_ROW  - 1) * HALF_MAX_LIGHT_RES,
-					(LIGHTS_PER_ROW - 1) * HALF_MAX_LIGHT_RES
+					-(LIGHTS_PER_ROW - 1) * HALF_LIGHT_RES,
+					(LIGHTS_PER_ROW - 1) * HALF_LIGHT_RES
 			);
 			point.add(
-					lightX * MAX_LIGHT_RES,
-					-lightY * MAX_LIGHT_RES
+					lightX * LIGHT_RES,
+					-lightY * LIGHT_RES
 			);
 		}
 		// set vertices of sprite

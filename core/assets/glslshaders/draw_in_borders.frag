@@ -11,20 +11,16 @@ uniform sampler2D u_texture;
 
 void main() {
 
-//    vec4 borders = v_color; // mis-use color attribute
+    vec4 borders = v_color; // mis-use color attribute
+    borders *= 1024;
 
-//    if (
-//        gl_FragCoord.x      >=  borders.r
-//        && gl_FragCoord.x   <=  borders.g
-//        && gl_FragCoord.y   >=  borders.b
-//        && gl_FragCoord.y   <=  borders.a
-//    ) {
-//
-//        gl_FragColor = texture2D(u_texture, v_texCoords);
-//    } else {
-////        gl_FragColor = gl_FragCoord / 500;
-////        gl_FragColor.a = 1;
-//        gl_FragColor = texture2D(u_texture, v_texCoords);
-//    }
-    gl_FragColor = texture2D(u_texture, v_texCoords);
+    if (
+        gl_FragCoord.x      >=  borders.r
+        && gl_FragCoord.x   <=  borders.g
+        && gl_FragCoord.y   >=  borders.b
+        && gl_FragCoord.y   <=  borders.a
+    ) {
+
+        gl_FragColor = texture2D(u_texture, v_texCoords);
+    }
 }
