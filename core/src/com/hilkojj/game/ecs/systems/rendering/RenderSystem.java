@@ -1,4 +1,4 @@
-package com.hilkojj.game.ecs.systems;
+package com.hilkojj.game.ecs.systems.rendering;
 
 import com.badlogic.ashley.core.*;
 import com.badlogic.ashley.utils.ImmutableArray;
