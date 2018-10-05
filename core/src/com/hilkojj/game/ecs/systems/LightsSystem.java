@@ -45,6 +45,7 @@ public class LightsSystem extends IteratingSystem {
 	);
 	private SpriteBatch batch = new SpriteBatch(1000, bordersShader);
 	private SpriteBatch tempBatch = new SpriteBatch();
+	private Texture lightTex;
 
 	public LightsSystem(ECSScreen ecs) {
 		super(Family.all(Lights.class).get());
@@ -52,7 +53,7 @@ public class LightsSystem extends IteratingSystem {
 		shadowQuad = new Sprite(
 				Game.assetManager.get("sprites/shadow_quad.png", Texture.class)
 		);
-		shadowQuad.setOrigin(0, 1);
+		lightTex = Game.assetManager.get("sprites/light.png", Texture.class);
 
 		// print shader errors/warnings
 		System.out.println("Border-shader log: \n" + bordersShader.getLog());
@@ -70,14 +71,33 @@ public class LightsSystem extends IteratingSystem {
 
 		// start
 		fbo.begin();
-		Gdx.gl.glClearColor(.5f, .5f, .5f, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
 
 		lightIndex = 0;
+		// render light texture for each light
+		batch.setColor(0, 1, 0, 1); // set borders
+		for (Entity e : getEntities()) {
+			for (Lights.Light l : mapper.get(e))
+				for (int i = 0; i < 16; i++) {
+					setLightPos();
+					renderLight(l);
+					lightIndex++;
+				}
+		}
 
-		super.update(deltaTime); // iterate over entities with Lights
+		lightIndex = 0;
+		// render shadows for each light
+		for (Entity e : getEntities()) {
+			for (Lights.Light l : mapper.get(e))
+				for (int i = 0; i < 16; i++) {
+					setLightPos();
+					renderShadows(l);
+					lightIndex++;
+				}
+		}
 
 		// end
 		batch.end();
@@ -93,28 +113,36 @@ public class LightsSystem extends IteratingSystem {
 		tempBatch.end();
 	}
 
-	@Override
-	protected void processEntity(Entity entity, float deltaTime) {
+	private void setLightPos() {
+		lightX = lightIndex % LIGHTS_PER_ROW;
+		lightY = lightIndex / LIGHTS_PER_ROW;
+	}
 
-		for (Lights.Light l : mapper.get(entity))
-			for (int i = 0; i < 16; i++)
-				renderLight(l, deltaTime);
+	private Vector2 lightRenderPos = new Vector2();
 
+	private void renderLight(Lights.Light l) {
+		float a = HALF_LIGHT_RES - l.radius * Game.PPM;
+		lightRenderPos.set(-HALF_LIGHT_RES * LIGHTS_PER_ROW, HALF_LIGHT_RES * (LIGHTS_PER_ROW - 2))
+				.add(a, a)
+				.add(
+						lightX * LIGHT_RES,
+						-lightY * LIGHT_RES
+				);
+
+		float size = 2 * l.radius * Game.PPM;
+		batch.draw(lightTex, lightRenderPos.x, lightRenderPos.y, size, size);
 	}
 
 	private final AABB lightAabb = new AABB(new Vector2(), new Vector2());
 	private Line temp = new Line();
 
-	private void renderLight(Lights.Light l, float deltaTime) {
+	private void renderShadows(Lights.Light l) {
 
-		lightX = lightIndex % LIGHTS_PER_ROW;
-		lightY = lightIndex / LIGHTS_PER_ROW;
-
-		shadowQuad.setColor(		// color attribute is (mis-)used by shader to determine borders
+		shadowQuad.setColor(        // color attribute is (mis-)used by shader to determine borders
 				// min X
 				(float) (lightX * LIGHT_RES) / FBO_RES,
 				// max X
-				(float)(lightX + 1) * LIGHT_RES / FBO_RES,
+				(float) (lightX + 1) * LIGHT_RES / FBO_RES,
 				// min Y
 				(float) (LIGHT_RES * LIGHTS_PER_ROW - ((lightY + 1) * LIGHT_RES)) / FBO_RES,
 				// max Y
@@ -127,8 +155,6 @@ public class LightsSystem extends IteratingSystem {
 		lightAabb.halfSize.set(l.radius, l.radius);
 
 		for (AALine line : outlines) if (line.intersects(lightAabb)) renderLineShadow(l, temp.set(line));
-
-		++lightIndex;
 	}
 
 	private Vector2 tempVec = new Vector2();
@@ -202,6 +228,11 @@ public class LightsSystem extends IteratingSystem {
 				verts,
 				0, verts.length
 		);
+	}
+
+	// this method is not used:
+	@Override
+	protected void processEntity(Entity entity, float deltaTime) {
 	}
 
 }
