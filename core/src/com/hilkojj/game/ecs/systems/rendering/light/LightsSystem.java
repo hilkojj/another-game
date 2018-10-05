@@ -45,6 +45,7 @@ public class LightsSystem extends IteratingSystem {
 	private Texture lightTex;
 
 	private ShadowRenderer shadowRenderer = new ShadowRenderer();
+	private LightMapGenerator lightMapGenerator = new LightMapGenerator();
 
 	public LightsSystem(ECSScreen ecs) {
 		super(Family.all(Lights.class).get());
@@ -66,6 +67,12 @@ public class LightsSystem extends IteratingSystem {
 	@Override
 	public void update(float deltaTime) {
 
+		/*
+			STEP 1:
+			RENDER EACH LIGHT TO A GRID ON A BIG TEXTURE
+			todo: only render lights that are inside viewport
+		 */
+
 		// start
 		fbo.begin();
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -77,38 +84,58 @@ public class LightsSystem extends IteratingSystem {
 		// render light texture for each light
 		batch.setColor(0, 1, 0, 1); // set borders
 		for (Entity e : getEntities()) {
-			for (Lights.Light l : mapper.get(e))
-				for (int i = 0; i < 16; i++) {
-					setLightPos();
-					renderLight(l);
-					lightIndex++;
-				}
+			for (Lights.Light l : mapper.get(e)) {
+				setLightPos();
+				renderLight(l);
+				lightIndex++;
+			}
 		}
 
 		lightIndex = 0;
 		// render shadows for each light
 		for (Entity e : getEntities()) {
-			for (Lights.Light l : mapper.get(e))
-				for (int i = 0; i < 16; i++) {
-					setLightPos();
-					shadowRenderer.renderShadows(
-							l, lightX, lightY, batch, ecs.getRoom()
-					);
-					lightIndex++;
-				}
+			for (Lights.Light l : mapper.get(e)) {
+				setLightPos();
+				shadowRenderer.renderShadows(
+						l, lightX, lightY, batch, ecs.getRoom()
+				);
+				lightIndex++;
+			}
 		}
 
-		// end
+		// end rendering to grid
 		batch.end();
 		fbo.end();
 
+		Texture grid = fbo.getColorBufferTexture();
+		grid.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+		/*
+			STEP 2:
+			DRAW THE LIGHTS FROM THE GRID ONTO A SCREEN-SIZED LIGHTMAP
+		 */
+		lightMapGenerator.start(grid, ecs.camera);
+		lightIndex = 0;
+		// render shadows for each light
+		for (Entity e : getEntities()) {
+			for (Lights.Light l : mapper.get(e)) {
+				setLightPos();
+
+				// draw a light on position (lightX, lightY) from the grid onto the lightmap
+				lightMapGenerator.draw(l, lightX, lightY);
+				lightIndex++;
+			}
+		}
+		lightMapGenerator.end();
+		// lightmap done
+
+		// temporary:
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		tempBatch.begin();
-		Texture t = fbo.getColorBufferTexture();
-		t.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-		tempBatch.draw(t, 10, 300, 300, -300);
+
+		tempBatch.draw(LightMapGenerator.lightMap, 0, Game.HEIGHT * 3, Game.WIDTH * 3, -Game.HEIGHT * 3);
 		tempBatch.end();
 	}
 

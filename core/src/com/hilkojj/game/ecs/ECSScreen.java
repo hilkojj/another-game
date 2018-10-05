@@ -3,6 +3,7 @@ package com.hilkojj.game.ecs;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.hilkojj.game.Game;
 import com.hilkojj.game.ecs.entities.JavelinThrower;
 import com.hilkojj.game.ecs.systems.*;
 import com.hilkojj.game.ecs.systems.rendering.light.LightsSystem;
@@ -13,7 +14,10 @@ public class ECSScreen implements Screen {
 	private Engine engine;
 	private Room room;
 
-	public final OrthographicCamera camera = new OrthographicCamera(320 / 16f, 180 / 16f);
+	public final OrthographicCamera camera = new OrthographicCamera(
+			Game.WIDTH / Game.PPM,
+			Game.HEIGHT / Game.PPM
+	);
 
 	@Override
 	public void show() {
@@ -63,8 +67,8 @@ public class ECSScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		camera.setToOrtho(false, 13.5F * width / height, 13.5F);
-		camera.update();
+//		camera.setToOrtho(false, 13.5F * width / height, 13.5F);
+//		camera.update();
 	}
 
 	public Room getRoom() {
