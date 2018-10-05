@@ -6,6 +6,8 @@ import com.hilkojj.game.loading.LoadingScreen;
 
 public class Game extends com.badlogic.gdx.Game {
 
+	public static final int PPM = 16; // pixels per meter
+
 	public static AssetManager assetManager;
 	public static long renderTime;
 
