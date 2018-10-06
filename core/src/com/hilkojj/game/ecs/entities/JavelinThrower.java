@@ -62,7 +62,7 @@ public class JavelinThrower extends Entity {
 		l.add(new Lights.Light(
 				b.center,
 				8,
-				Color.WHITE
+				new Color(.8f, .6f, .4f, 1)
 		));
 		l.add(new Lights.Light(
 				new Vector2(17, 2),

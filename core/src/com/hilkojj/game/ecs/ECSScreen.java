@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.hilkojj.game.Game;
 import com.hilkojj.game.ecs.entities.JavelinThrower;
 import com.hilkojj.game.ecs.systems.*;
+import com.hilkojj.game.ecs.systems.rendering.fog.FogSystem;
 import com.hilkojj.game.ecs.systems.rendering.light.LightsSystem;
 import com.hilkojj.game.level.Room;
 
@@ -32,6 +33,7 @@ public class ECSScreen implements Screen {
 		engine.addSystem(new ParticleSystem());
 		engine.addSystem(new LandingParticlesSystem(this));
 		engine.addSystem(new LightsSystem(this));
+		engine.addSystem(new FogSystem(this));
 
 		engine.addEntity(new JavelinThrower());
 

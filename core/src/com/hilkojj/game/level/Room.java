@@ -80,6 +80,13 @@ public class Room {
 		return blocks[x][y];
 	}
 
+	public int distToGround(int x, int y) {
+		for (int y0 = y; y0 >= 0; y0--)
+			if (getBlock(x, y0) != Block.AIR)
+				return y - y0;
+		return y;
+	}
+
 	public TileMap getTileMap() {
 		if (tileMap == null) tileMap = new TileMap(this);
 		return tileMap;
