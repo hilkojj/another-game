@@ -72,13 +72,16 @@ public class FogSystem extends EntitySystem {
 		temp.setProjectionMatrix(ecs.camera.combined);
 		temp.begin();
 		for (FogCloud c: clouds) {
-			temp.setColor(.05f, .05f, .05f, 1);
+			float val = Math.min(c.timer / 2f, 1);
+			val -= 1 -Math.min(c.lifeTime - c.timer, 1);
+			val *= .03f;
+			temp.setColor(val, val, val, 1);
 			temp.draw(
 					cloudGrid,
-					c.x - CLOUD_SIZE / Game.PPM / 2f,
-					c.y - CLOUD_SIZE / Game.PPM / 2f,
-					CLOUD_SIZE / Game.PPM,
-					CLOUD_SIZE / Game.PPM,
+					c.x - CLOUD_SIZE / Game.PPM / 4f,
+					c.y - CLOUD_SIZE / Game.PPM / 4f,
+					CLOUD_SIZE / Game.PPM / 2f,
+					CLOUD_SIZE / Game.PPM / 2f,
 					CLOUD_SIZE * c.textureX,
 					CLOUD_SIZE * c.textureY,
 					CLOUD_SIZE, CLOUD_SIZE, false, false
@@ -97,11 +100,11 @@ public class FogSystem extends EntitySystem {
 		for (int x = 0; x <= room.xChunks * CHUNK_WIDTH; x++) {
 			for (int y = 0; y < room.yChunks * CHUNK_HEIGHT; y++) {
 
-				if (room.getBlock(x, y) != Room.Block.AIR) continue;
+				if (room.getBlock(x, y) != Room.Block.AIR && Random.random() > .1f) continue;
 
 				int distToGround = room.distToGround(x, y);
 
-				float p = 1 - distToGround * .1f;
+				float p = 1 - distToGround * .3f;
 				p += Random.random() * .7f;
 
 				if (p >= 1) spawnPoints.add(new Vector2(x, y));
@@ -111,7 +114,7 @@ public class FogSystem extends EntitySystem {
 
 	private void spawnClouds() {
 
-		int i = (int) (10 * Random.random());
+		int i = (int) (8 * Random.random());
 		while (i < spawnPoints.size) {
 
 			Vector2 spawnPoint = spawnPoints.get(i);
@@ -120,16 +123,16 @@ public class FogSystem extends EntitySystem {
 			c.x = spawnPoint.x + Random.random();
 			c.y = spawnPoint.y + Random.random();
 
-			c.velX = (Random.random() - .5f) * .2f;
-			c.velY = (Random.random() - .2f) * .2f;
-			c.lifeTime = 5 + Random.random() * 15;
+			c.velX = (Random.random() - .5f) * .3f;
+			c.velY = (Random.random() - .35f) * .3f;
+			c.lifeTime = 3 + Random.random() * 5;
 
-			c.textureX = (int) Random.random() * CLOUDS_PER_ROW;
-			c.textureY = (int) Random.random() * CLOUDS_PER_ROW;
+			c.textureX = (int) (Random.random() * CLOUDS_PER_ROW);
+			c.textureY = (int) (Random.random() * CLOUDS_PER_ROW);
 
 			clouds.add(c);
 
-			i += 40 * Random.random();
+			i += 16 * Random.random();
 		}
 	}
 
@@ -146,10 +149,6 @@ public class FogSystem extends EntitySystem {
 
 			c.x += c.velX * deltaTime;
 			c.y += c.velY * deltaTime;
-
-			int x = (int) c.x, y = (int) c.y;
-			if (room.getBlock(x, y) != Room.Block.AIR && room.getBlock(x, y - 1) == Room.Block.AIR)
-				c.velY *= Math.pow(.2f, deltaTime);
 		}
 	}
 
